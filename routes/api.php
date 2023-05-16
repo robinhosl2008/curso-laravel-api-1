@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Episode;
 use App\Models\Series;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +36,16 @@ Route::get('/series/{series}/seasons', function(Series $series) {
 
 Route::get('/series/{series}/episodes', function(Series $series) {
     return $series->episodes;
+});
+
+Route::patch('/series/season/episode/{id}/watched', function(int $id) {
+    $episode = Episode::where('id', $id)->first();
+    $episode->watched = 1;
+    $res = $episode->update();
+
+    if ($res != 1) {
+        return "Erro ao editar a visualização";
+    }
+    
+    return $episode;
 });
